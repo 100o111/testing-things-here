@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title></title>
   <style>
     html, body {
       margin: 0;
-      padding: 0;
       background: white;
-      overflow: hidden;
       height: 100vh;
+      overflow: hidden;
     }
   </style>
 </head>
 <body>
   <script>
-    let count = 1;
+    const frames = [
+      '/~       ~',
+      '/ ~     ~ ',
+      '/  ~   ~  ',
+      '/   ~ ~   ',
+      '/    ~    ',
+      '/   ~ ~   ',
+      '/  ~   ~  ',
+      '/ ~     ~ ',
+      '/~       ~'
+    ];
+
+    let i = 0;
     setInterval(() => {
-      history.pushState(null, '', '/' + count++);
-    }, 100); // Speed: change to 50ms, 200ms, etc. if you want faster/slower
+      history.pushState(null, '', frames[i % frames.length]);
+      i++;
+    }, 120);
   </script>
 </body>
 </html>
