@@ -6,7 +6,6 @@
   <style>
     html, body {
       margin: 0;
-      padding: 0;
       background: white;
       height: 100vh;
       overflow: hidden;
@@ -16,21 +15,21 @@
 <body>
   <script>
     const frames = [
-      '/~-------~',
-      '/-~-----~-',
-      '/--~---~--',
-      '/---~-~---',
-      '/----~----',
-      '/---~-~---',
-      '/--~---~--',
-      '/-~-----~-',
-      '/~-------~'
+      '/aaaaaaa',
+      '/baaaaaa',
+      '/abaaaaa',
+      '/aabaaaa',
+      '/aaabaaa',
+      '/aaaabaa',
+      '/aaaaaba',
+      '/aaaaaab',
+      '/aaaaaaa'
     ];
 
     let i = 0;
     setInterval(() => {
       history.pushState(null, '', frames[i++ % frames.length]);
-    }, 150);
+    }, 120);
   </script>
 </body>
 </html>
