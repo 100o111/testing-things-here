@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🌑</title>
+  <title></title>
   <style>
     html, body {
       margin: 0;
+      padding: 0;
       background: white;
       height: 100vh;
       overflow: hidden;
@@ -14,16 +15,22 @@
 </head>
 <body>
   <script>
-    const moons = [
-      '🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'
+    const frames = [
+      '/~-------~',
+      '/-~-----~-',
+      '/--~---~--',
+      '/---~-~---',
+      '/----~----',
+      '/---~-~---',
+      '/--~---~--',
+      '/-~-----~-',
+      '/~-------~'
     ];
 
     let i = 0;
     setInterval(() => {
-      const wave = moons[i % moons.length].repeat(5);
-      history.pushState(null, '', '/' + wave);
-      i++;
-    }, 200);
+      history.pushState(null, '', frames[i++ % frames.length]);
+    }, 150);
   </script>
 </body>
 </html>
