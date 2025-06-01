@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title></title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: white;
+      overflow: hidden;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    let count = 1;
+    setInterval(() => {
+      history.pushState(null, '', '/' + count++);
+    }, 100); // Speed: change to 50ms, 200ms, etc. if you want faster/slower
+  </script>
+</body>
+</html>
