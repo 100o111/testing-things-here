@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>🌑</title>
   <style>
     html, body {
       margin: 0;
-      padding: 0;
       background: white;
       height: 100vh;
       overflow: hidden;
@@ -15,23 +14,16 @@
 </head>
 <body>
   <script>
-    const nbsp = '\u00A0'; // non-breaking space
-    const frames = [
-      '/~' + nbsp.repeat(7) + '~',
-      '/' + nbsp + '~' + nbsp.repeat(5) + '~' + nbsp,
-      '/' + nbsp.repeat(2) + '~' + nbsp.repeat(3) + '~' + nbsp.repeat(2),
-      '/' + nbsp.repeat(3) + '~' + nbsp + '~' + nbsp.repeat(3),
-      '/' + nbsp.repeat(4) + '~' + nbsp.repeat(4),
-      '/' + nbsp.repeat(3) + '~' + nbsp + '~' + nbsp.repeat(3),
-      '/' + nbsp.repeat(2) + '~' + nbsp.repeat(3) + '~' + nbsp.repeat(2),
-      '/' + nbsp + '~' + nbsp.repeat(5) + '~' + nbsp,
-      '/~' + nbsp.repeat(7) + '~'
+    const moons = [
+      '🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'
     ];
 
     let i = 0;
     setInterval(() => {
-      history.pushState(null, '', frames[i++ % frames.length]);
-    }, 120);
+      const wave = moons[i % moons.length].repeat(5);
+      history.pushState(null, '', '/' + wave);
+      i++;
+    }, 200);
   </script>
 </body>
 </html>
