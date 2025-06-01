@@ -2,34 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Counting URL</title>
+  <title></title>
   <style>
     html, body {
       margin: 0;
+      padding: 0;
       background: white;
-      height: 100vh;
       overflow: hidden;
-      font-family: monospace;
-      color: #ccc;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
-  <div id="counter">1</div>
-
   <script>
     let count = 1;
-    const counterEl = document.getElementById('counter');
-
     setInterval(() => {
-      count++;
-      counterEl.textContent = count;
-      history.pushState(null, '', '/' + count);
-    }, 1000);
+      history.pushState(null, '', '/' + count++);
+    }, 150); // Adjust speed here (in milliseconds)
   </script>
 </body>
 </html>
