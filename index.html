@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    html, body {
+      margin: 0;
+      background: white;
+      height: 100vh;
+      overflow: hidden;
+      cursor: none;
+    }
+  </style>
+</head>
+<body>
+<script>
+function getCanvasHash() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 200; canvas.height = 50;
+  const ctx = canvas.getContext('2d');
+  ctx.textBaseline = 'top';
+  ctx.font = '16px Arial';
+  ctx.fillText('fingerprint', 2, 2);
+  return canvas.toDataURL().slice(-20);
+}
+
+function getWebGLInfo() {
+  const canvas = document.createElement('canvas');
+  const gl = canvas.getContext('webgl');
+  if (!gl) return {};
+  return {
+    vendor: gl.getExtension('WEBGL_debug_renderer_info') ? gl.getParameter(gl.getExtension('WEBGL_debug_renderer_info').UNMASKED_VENDOR_WEBGL) : 'unknown',
+    renderer: gl.getExtension('WEBGL_debug_renderer_info') ? gl.getParameter(gl.getExtension('WEBGL_debug_renderer_info').UNMASKED_RENDERER_WEBGL) : 'unknown',
+    shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
+    webglVersion: gl.getParameter(gl.VERSION),
+    maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+    maxCombinedTextureImageUnits: gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS)
+  };
+}
+
+function getAudioHash(callback) {
+  const ctx = new OfflineAudioContext(1, 44100, 44100);
+  const osc = ctx.createOscillator();
+  osc.type = 'triangle';
+  osc.frequency.value = 1000;
+  const comp = ctx.createDynamicsCompressor();
+  osc.connect(comp);
+  comp.connect(ctx.destination);
+  osc.start(0);
+  ctx.startRendering().then(buffer => {
+    let hash = 0;
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i += 100) {
+      hash += Math.abs(data[i]);
+    }
+    addToInfo(['audioHash', hash.toFixed(5)]);
+  });
+}
+
+function addToInfo(entry) {
+  info.push(entry);
+}
+
+const gpu = getWebGLInfo();
+const conn = navigator.connection || {};
+
+const info = [
+  ['userAgent', navigator.userAgent],
+  ['platform', navigator.platform],
+  ['screenResolution', `${screen.width}x${screen.height}`],
+  ['colorDepth', screen.colorDepth.toString()],
+  ['devicePixelRatio', window.devicePixelRatio.toString()],
+  ['language', navigator.language],
+  ['languages', navigator.languages.join(',')],
+  ['timeZone', Intl.DateTimeFormat().resolvedOptions().timeZone],
+  ['timezoneOffset', new Date().getTimezoneOffset().toString()],
+  ['performanceOffset', performance.now().toFixed(0)],
+  ['hardwareConcurrency', navigator.hardwareConcurrency?.toString() || 'unknown'],
+  ['deviceMemory', navigator.deviceMemory?.toString() || 'unknown'],
+  ['maxTouchPoints', navigator.maxTouchPoints?.toString() || '0'],
+  ['cookiesEnabled', navigator.cookieEnabled.toString()],
+  ['doNotTrack', navigator.doNotTrack?.toString() || 'unspecified'],
+  ['canvasHash', getCanvasHash()],
+  ['gpuVendor', gpu.vendor || 'unknown'],
+  ['gpuRenderer', gpu.renderer || 'unknown'],
+  ['shadingLanguageVersion', gpu.shadingLanguageVersion || 'unknown'],
+  ['webglVersion', gpu.webglVersion || 'unknown'],
+  ['maxTextureSize', gpu.maxTextureSize?.toString() || 'unknown'],
+  ['maxCombinedTextureImageUnits', gpu.maxCombinedTextureImageUnits?.toString() || 'unknown'],
+  ['connectionType', conn.type || 'unknown'],
+  ['effectiveType', conn.effectiveType || 'unknown'],
+  ['rtt', conn.rtt?.toString() || 'unknown'],
+  ['saveData', conn.saveData?.toString() || 'false'],
+  ['localStorage', typeof localStorage !== 'undefined' ? 'true' : 'false'],
+  ['sessionStorage', typeof sessionStorage !== 'undefined' ? 'true' : 'false']
+];
+
+// Timer precision as entropy
+const start = performance.now();
+setTimeout(() => {
+  const diff = (performance.now() - start).toFixed(3);
+  addToInfo(['timerDrift', diff]);
+}, 50);
+
+getAudioHash(() => {});
+
+let index = 0;
+function step() {
+  const [label, value] = info[index];
+  const path = '/' + encodeURIComponent(label) + '/' + encodeURIComponent(value);
+  history.replaceState(null, '', path);
+  index = (index + 1) % info.length;
+}
+
+setInterval(step, 100); // 10 updates per second
+</script>
+</body>
+</html>
